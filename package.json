@@ -33,6 +33,7 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
+    "react-scripts": "^5.0.1",
     "react-share": "^5.2.2",
     "socket.io": "^4.8.1"
   }

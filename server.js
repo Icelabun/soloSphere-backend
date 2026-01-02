@@ -21,7 +21,7 @@ const httpServer = createServer(app);
 // Socket.IO setup
 const corsOrigins = process.env.CORS_ORIGINS 
   ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim())
-  : ["http://localhost:3000", "http://localhost:5001"];
+  : ["https://solosphere-1.onrender.com", "http://localhost:5001"];
 
 const io = new Server(httpServer, {
   cors: {
