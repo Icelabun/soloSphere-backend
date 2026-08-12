@@ -1,16 +1,18 @@
 import mongoose from "mongoose";
+import dns from "dns";
 import dotenv from "dotenv";
 import Admin from "../models/Admin.js";
 
 dotenv.config();
 
+// Make sure SRV DNS resolution works for MongoDB Atlas
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
+dns.setDefaultResultOrder("ipv4first");
+
 const resetAdminPassword = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await mongoose.connect(process.env.MONGO_URI);
     console.log("✅ Connected to MongoDB");
 
     // Get admin credentials from env or use defaults

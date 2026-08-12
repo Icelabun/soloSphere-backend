@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import dns from "dns";
 import cors from "cors";
 import dotenv from "dotenv";
 import { createServer } from "http";
@@ -21,7 +22,7 @@ const httpServer = createServer(app);
 // Socket.IO setup
 const corsOrigins = process.env.CORS_ORIGINS 
   ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim())
-  : ["https://solosphere-1.onrender.com", "http://localhost:5001"];
+  : ["https://solosphere-1.onrender.com", "http://localhost:5001", "http://localhost:3000", "http://127.0.0.1:3000"];
 
 const io = new Server(httpServer, {
   cors: {
@@ -133,11 +134,13 @@ app.use(cors({
   credentials: true,
 }));
 
+// MongoDB DNS fallback for Atlas SRV resolution
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
+dns.setDefaultResultOrder("ipv4first");
+console.log("🔎 DNS servers set for MongoDB SRV lookup:", dns.getServers());
+
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true 
-})
+mongoose.connect(process.env.MONGO_URI)
 .then(async () => {
   console.log("\n✅ MongoDB Connected");
   const { host, port, name } = mongoose.connection;

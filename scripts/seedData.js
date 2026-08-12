@@ -251,11 +251,13 @@ const seedAll = async () => {
   try {
     console.log('🌱 Starting database seeding...');
     
+    // Make sure SRV DNS resolution works for MongoDB Atlas
+    dns.setServers(["8.8.8.8", "1.1.1.1"]);
+    dns.setDefaultResultOrder("ipv4first");
+    console.log('🔎 DNS servers set for MongoDB SRV lookup:', dns.getServers());
+    
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await mongoose.connect(process.env.MONGO_URI);
     console.log('✅ Connected to MongoDB');
 
     // Seed data
